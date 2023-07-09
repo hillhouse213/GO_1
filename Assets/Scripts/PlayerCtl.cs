@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerCtl : MonoBehaviour
 {
-    //ì†ë„ ê´€ë ¨
+    //¼Óµµ °ü·Ã
     [SerializeField]
     private float walkSpeed;
     [SerializeField]
@@ -12,23 +12,23 @@ public class PlayerCtl : MonoBehaviour
     private float applySpeed;
     [SerializeField]
     private float crouchSpeed;
-    //ì í”„
+    //Á¡ÇÁ
     [SerializeField]
     private float jumpForce;
-    //ì¡°ê±´
+    //Á¶°Ç
     private bool isRun;
     private bool isGround = true;
     private bool isCrouch;
-    //ì•‰ê¸°
+    //¾É±â
     [SerializeField]
     private float crouchPosY;
     private float originPosY;
     private float applyCrouchPosY;
 
     private CapsuleCollider capsuleCollider;
-   
+
     private Rigidbody myRigid;
-    //í™”ë©´ ê°ë„
+    //È­¸é °¢µµ
     [SerializeField]
     private float lookSensitivity;
     [SerializeField]
@@ -56,7 +56,7 @@ public class PlayerCtl : MonoBehaviour
         CameraRotation();
         CharacterRotation();
     }
-    //ì´ë™
+    //ÀÌµ¿
     private void Move()
     {
         float _moveDirX = Input.GetAxisRaw("Horizontal");
@@ -69,7 +69,7 @@ public class PlayerCtl : MonoBehaviour
 
         myRigid.MovePosition(transform.position + _velocity * Time.deltaTime);
     }
-    //ì¹´ë©”ë¼ ìƒí•˜
+    //Ä«¸Ş¶ó »óÇÏ
     private void CameraRotation()
     {
         float _xRotation = Input.GetAxisRaw("Mouse Y");
@@ -78,7 +78,7 @@ public class PlayerCtl : MonoBehaviour
         currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -cameraRotationLimit, cameraRotationLimit);
         theCamera.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0f, 0f);
     }
-    //ìºë¦­í„° ì¹´ë©”ë¼ ì¢Œìš°
+    //Ä³¸¯ÅÍ Ä«¸Ş¶ó ÁÂ¿ì
     private void CharacterRotation()
     {
         float _yRotation = Input.GetAxisRaw("Mouse X");
@@ -111,7 +111,7 @@ public class PlayerCtl : MonoBehaviour
     }
     private void TryJump()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && isGround)
+        if (Input.GetKeyDown(KeyCode.Space) && isGround)
         {
             Jump();
         }
@@ -152,7 +152,7 @@ public class PlayerCtl : MonoBehaviour
     }
     IEnumerator CrouchCoroutine()
     {
-        float duration = 0.2f; // ì•‰ê¸°/ì¼ì–´ë‚˜ëŠ” ì‹œê°„
+        float duration = 0.2f; // ¾É±â/ÀÏ¾î³ª´Â ½Ã°£
         float elapsedTime = 0f;
         Vector3 initialCameraPosition = theCamera.transform.localPosition;
         Vector3 targetCameraPosition = new Vector3(0f, applyCrouchPosY, 0f);
@@ -162,15 +162,13 @@ public class PlayerCtl : MonoBehaviour
             elapsedTime += Time.deltaTime;
             float t = Mathf.Clamp01(elapsedTime / duration);
 
-            // ë¶€ë“œëŸ¬ìš´ ì•‰ê¸° ëª¨ì…˜ì„ ìœ„í•´ ê³¡ì„ ì„ ì‚¬ìš©í•˜ì—¬ ë³´ê°„
-            float curveValue = Mathf.Sin(t * Mathf.PI * 0.5f); // ì‹œì‘ê³¼ ë ë¶€ë¶„ì´ ë” ëŠë¦¬ê²Œ ë³´ê°„ë˜ë„ë¡ Sin ê³¡ì„  ì‚¬ìš©
+            // ºÎµå·¯¿î ¾É±â ¸ğ¼ÇÀ» À§ÇØ °î¼±À» »ç¿ëÇÏ¿© º¸°£
+            float curveValue = Mathf.Sin(t * Mathf.PI * 0.5f); // ½ÃÀÛ°ú ³¡ ºÎºĞÀÌ ´õ ´À¸®°Ô º¸°£µÇµµ·Ï Sin °î¼± »ç¿ë
             Vector3 newCameraPosition = Vector3.Lerp(initialCameraPosition, targetCameraPosition, curveValue);
             theCamera.transform.localPosition = newCameraPosition;
 
             yield return null;
         }
-
         theCamera.transform.localPosition = targetCameraPosition;
     }
-
 }
