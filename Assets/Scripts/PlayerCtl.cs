@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class PlayerCtl : MonoBehaviour
 {
-    // ¹æ¹ý1 Á÷Á¢ ³Ö±â
-    // ½ºÇÇµå¿Í °ü·ÃµÈ º¯¼ö
+    //ì†ë„ ê´€ë ¨
     [SerializeField]
     private float walkSpeed;
     [SerializeField]
@@ -13,31 +12,25 @@ public class PlayerCtl : MonoBehaviour
     private float applySpeed;
     [SerializeField]
     private float crouchSpeed;
-
+    //ì í”„
     [SerializeField]
     private float jumpForce;
-
-    // »óÅÂ º¯¼ö ±âº» °ª false
+    //ì¡°ê±´
     private bool isRun;
     private bool isGround = true;
     private bool isCrouch;
-
-    // ¾É¾ÒÀ» ¶§ ¾ó¸¶³ª ¾ÉÀ»Áö °áÁ¤ÇÏ´Â º¯¼ö
+    //ì•‰ê¸°
     [SerializeField]
     private float crouchPosY;
     private float originPosY;
     private float applyCrouchPosY;
 
-    // ¶¥ ÂøÁö ¿©ºÎ
     private CapsuleCollider capsuleCollider;
    
-    // ¹æ¹ý2 ¹Þ¾Æ¿Í¼­ ³Ö±â
     private Rigidbody myRigid;
-
-    // Ä«¸Þ¶ó ¹Î°¨µµ
+    //í™”ë©´ ê°ë„
     [SerializeField]
     private float lookSensitivity;
-    // Ä«¸Þ¶ó ÇÑ°è
     [SerializeField]
     private float cameraRotationLimit;
     private float currentCameraRotationX = 0f;
@@ -63,6 +56,7 @@ public class PlayerCtl : MonoBehaviour
         CameraRotation();
         CharacterRotation();
     }
+    //ì´ë™
     private void Move()
     {
         float _moveDirX = Input.GetAxisRaw("Horizontal");
@@ -73,10 +67,9 @@ public class PlayerCtl : MonoBehaviour
 
         Vector3 _velocity = (_moveHorizontal + _moveVertical).normalized * applySpeed;
 
-        // Å¸ÀÓÀ» ¾È½áÁÖ¸é ÇÑ¹ø¿¡ ÀÌµ¿ÇÔ
         myRigid.MovePosition(transform.position + _velocity * Time.deltaTime);
     }
-    // »óÇÏ Ä«¸Þ¶ó È¸Àü
+    //ì¹´ë©”ë¼ ìƒí•˜
     private void CameraRotation()
     {
         float _xRotation = Input.GetAxisRaw("Mouse Y");
@@ -85,7 +78,7 @@ public class PlayerCtl : MonoBehaviour
         currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -cameraRotationLimit, cameraRotationLimit);
         theCamera.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0f, 0f);
     }
-    // ÁÂ¿ì Ä³¸¯ÅÍ È¸Àü
+    //ìºë¦­í„° ì¹´ë©”ë¼ ì¢Œìš°
     private void CharacterRotation()
     {
         float _yRotation = Input.GetAxisRaw("Mouse X");
@@ -161,7 +154,7 @@ public class PlayerCtl : MonoBehaviour
         while(_posY != applyCrouchPosY)
         {
             count++;
-            _posY = Mathf.Lerp(_posY, applyCrouchPosY, 0.05f);
+            _posY = Mathf.Lerp(_posY, applyCrouchPosY, 0.01f);
             theCamera.transform.localPosition = new Vector3(0, _posY, 0);
             if (count > 5)
             {
