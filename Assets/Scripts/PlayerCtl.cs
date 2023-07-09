@@ -90,6 +90,7 @@ public class PlayerCtl : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W))
         {
             Running();
+
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
@@ -98,6 +99,8 @@ public class PlayerCtl : MonoBehaviour
     }
     private void Running()
     {
+        isCrouch = true;
+        Crouch();
         isRun = true;
         applySpeed = runSpeed;
     }
@@ -149,19 +152,25 @@ public class PlayerCtl : MonoBehaviour
     }
     IEnumerator CrouchCoroutine()
     {
-        float _posY = theCamera.transform.position.y;
-        int count = 0;
-        while(_posY != applyCrouchPosY)
+        float duration = 0.2f; // 앉기/일어나는 시간
+        float elapsedTime = 0f;
+        Vector3 initialCameraPosition = theCamera.transform.localPosition;
+        Vector3 targetCameraPosition = new Vector3(0f, applyCrouchPosY, 0f);
+
+        while (elapsedTime < duration)
         {
-            count++;
-            _posY = Mathf.Lerp(_posY, applyCrouchPosY, 0.01f);
-            theCamera.transform.localPosition = new Vector3(0, _posY, 0);
-            if (count > 5)
-            {
-                break;
-            }
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / duration);
+
+            // 부드러운 앉기 모션을 위해 곡선을 사용하여 보간
+            float curveValue = Mathf.Sin(t * Mathf.PI * 0.5f); // 시작과 끝 부분이 더 느리게 보간되도록 Sin 곡선 사용
+            Vector3 newCameraPosition = Vector3.Lerp(initialCameraPosition, targetCameraPosition, curveValue);
+            theCamera.transform.localPosition = newCameraPosition;
+
             yield return null;
         }
-        theCamera.transform.localPosition = new Vector3(0, applyCrouchPosY, 0f);
+
+        theCamera.transform.localPosition = targetCameraPosition;
     }
+
 }
